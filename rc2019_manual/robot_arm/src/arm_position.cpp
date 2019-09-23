@@ -40,7 +40,7 @@ int main(int argc, char **argv){
 	ros::Subscriber position_sub = n.subscribe("controller_info", 10, controllerCallback);
 	ros::Subscriber calibration_sub = n.subscribe("calibration", 30, calibrationCallback);
 	ros::Publisher position_pub = n.advertise<std_msgs::Float64MultiArray>("angle_info", 10);
-	ros::Publisher calibration_pub = n.advertise<std_msgs::Bool>("z_calibration", 10);
+	//ros::Publisher calibration_pub = n.advertise<std_msgs::Bool>("z_calibration", 10);
 	calibration = n.serviceClient<motor_serial::motor_serial>("arm_calibration");
 	
 	gpio_handle_ = Pigpiod::gpio().checkHandle();
@@ -52,14 +52,14 @@ int main(int argc, char **argv){
 	ros::Rate loop_rate(1000);
 
 	while(ros::ok()){
-		std_msgs::Bool calibration;
+		//std_msgs::Bool calibration;
 		if(flag_calibration){
 			if(arm_count > motion_sum) arm_count = 0;
 			position_pub.publish(angle_data);
 			ROS_INFO("%d", (int)angle_data.data[0]);
-			calibration.data = true;
+			//calibration.data = true;
 		}else{
-			calibration.data = false;
+			//calibration.data = false;
 		}
 		ros::spinOnce();
 		loop_rate.sleep();
@@ -78,20 +78,20 @@ void controllerCallback(const three_omuni::button &button){
 void arm_pose(const int angle_goal){
 	switch(angle_goal){
 		case 1:
-			angle_data.data[0] = 200;
+			angle_data.data[0] = 300;
 			angle_data.data[1] = 200;
 			break;
 		case 2:
-			angle_data.data[0] = 210;
+			angle_data.data[0] = 310;
 			angle_data.data[1] = 210;
 			break;
 		case 3:
-			angle_data.data[0] = 220;
-			angle_data.data[1] = 220;
+			angle_data.data[0] = 320;
+			angle_data.data[1] = 320;
 			break;
 		default:
-			angle_data.data[0] = 230;
-			angle_data.data[1] = 230;
+			angle_data.data[0] = 330;
+			angle_data.data[1] = 330;
 			break;
 	}
 }
